@@ -52,7 +52,7 @@ class Platform{
 }
 
 const player = new Player()
-const platform = new Platform()
+const platforms = [new Platform()]
 
 
 const keys = { //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
@@ -68,15 +68,17 @@ function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
-    platform.draw()
+    platforms.forEach((platform) =>{
+        platform.draw()
+    })
 
 
 	if(keys.right.pressed
-        && player.position.x <450
+        && player.position.x < canvas.width - 700
         ) {
 		player.velocity.x = 5;
 	} else if(keys.left.pressed
-        &&  player.position.x >150
+        &&  player.position.x > 350
         ) {
 		player.velocity.x = -5;
 	} else {
@@ -84,20 +86,26 @@ function animate() {
         if(Math.abs(player.velocity.x) <= 0.3){ //reach true 0, and that will probably makes some stuff harder down the line
             player.velocity.x = 0              //so added safe guard, just to be sure, maybe will need fixing later.
         }
-        if (keys.right.pressed){
-            platform.position.x -= 5
+        if (keys.right.pressed){ 
+            platforms.forEach((platform) =>{
+                platform.position.x -= 5
+            })
         }
         if (keys.left.pressed){
-            platform.position.x += 5
+            platforms.forEach((platform) =>{
+                platform.position.x += 5
+            })
 
         }
 	}
-    if (player.position.y + player.height <= platform.position.y 
-        && player.position.y + player.height + player.velocity.y >= platform.position.y
-        && player.position.x +player.width >= platform.position.x
-        && player.position.x  <= platform.position.x + platform.width
-        )
-    {player.velocity.y = 0}
+    platforms.forEach((platform) =>{
+        if (player.position.y + player.height <= platform.position.y 
+            && player.position.y + player.height + player.velocity.y >= platform.position.y
+            && player.position.x +player.width >= platform.position.x
+            && player.position.x  <= platform.position.x + platform.width
+            )
+        {player.velocity.y = 0}    })
+
 }
 
 animate()
