@@ -37,10 +37,10 @@ class Player {
 }
 
 class Platform{  
-    constructor() {
+    constructor({ x, y}) {
         this.position = {
-            x:200,
-            y:100
+            x:x,
+            y:y
         }
         this.width = 200
         this.height = 20
@@ -52,7 +52,11 @@ class Platform{
 }
 
 const player = new Player()
-const platforms = [new Platform()]
+const platforms = [
+    new Platform({x:200,y:100}),
+    new Platform({x:100,y:500}),
+    new Platform({x:400,y:300})
+]
 
 
 const keys = { //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
@@ -117,7 +121,7 @@ window.addEventListener('keydown', ({ keyCode }) => {
         case 87:
             {
                 console.log('up')
-                player.velocity.y -= 20
+                player.velocity.y -= 10
                 break
             }
         case 83:
