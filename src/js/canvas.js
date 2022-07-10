@@ -1,3 +1,5 @@
+import platform from '../../assets/platform.png'
+console.log(platform)
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -37,25 +39,32 @@ class Player {
 }
 
 class Platform{  
-    constructor({ x, y}) {
+    constructor({ x, y, image}) {
         this.position = {
             x:x,
             y:y
         }
-        this.width = 200
+        this.image = image
+        this.width = image.width
         this.height = 20
     }
     draw(){
-        c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+      c.drawImage(this.image,
+        this.position.x,
+        this.position.y)
+        // c.fillStyle = 'blue'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
+const image = new Image()
+image.src = platform
+
 const player = new Player()
 const platforms = [
-    new Platform({x:200,y:100}),
-    new Platform({x:100,y:500}),
-    new Platform({x:400,y:300})
+    new Platform({x:200,y:100, image:image}),
+    new Platform({x:100,y:500, image:image}),
+    new Platform({x:400,y:300, image:image}),
 ]
 
 
@@ -112,7 +121,6 @@ function animate() {
             )
         {player.velocity.y = 0}    })
 
-        console.log(scrollOffset)
  if (scrollOffset>2000){alert('you won')}
 }
 
@@ -129,7 +137,7 @@ window.addEventListener('keydown', ({ keyCode }) => {
         case 87:
             {
                 console.log('up')
-                player.velocity.y -= 10
+                player.velocity.y -= 20
                 break
             }
         case 83:
@@ -161,7 +169,6 @@ window.addEventListener('keyup', ({ keyCode }) => {
         case 87:
             {
                 console.log('up up')
-                player.velocity.y -= 20
                 break
             }
         case 83:
