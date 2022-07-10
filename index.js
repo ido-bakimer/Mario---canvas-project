@@ -71,14 +71,25 @@ function animate() {
     platform.draw()
 
 
-	if(keys.right.pressed) {
+	if(keys.right.pressed
+        && player.position.x <450
+        ) {
 		player.velocity.x = 5;
-	} else if(keys.left.pressed) {
+	} else if(keys.left.pressed
+        &&  player.position.x >150
+        ) {
 		player.velocity.x = -5;
 	} else {
 		player.velocity.x *= friction;    //just realised that by using friction the v value will never 
         if(Math.abs(player.velocity.x) <= 0.3){ //reach true 0, and that will probably makes some stuff harder down the line
             player.velocity.x = 0              //so added safe guard, just to be sure, maybe will need fixing later.
+        }
+        if (keys.right.pressed){
+            platform.position.x -= 5
+        }
+        if (keys.left.pressed){
+            platform.position.x += 5
+
         }
 	}
     if (player.position.y + player.height <= platform.position.y 
