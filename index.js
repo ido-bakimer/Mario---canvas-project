@@ -5,7 +5,7 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 const gravity = 0.9
-const friction = 0.3 
+const friction = 0.97 
 
 class Player {
     constructor() {
@@ -38,11 +38,28 @@ class Player {
 
 
 const player = new Player()
+const keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
+    },
+}
 
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
+
+
+	if(keys.right.pressed) {
+		player.velocity.x = 5;
+	} else if(keys.left.pressed) {
+		player.velocity.x = -5;
+	} else {
+		player.velocity.x *= friction;
+	}
 }
 
 animate()
@@ -63,13 +80,13 @@ window.addEventListener('keydown', ({ keyCode }) => {
         case 68:
             {
                 console.log('right')
-                player.velocity.x = 10
+                keys.right.pressed = true
                 break
             }
         case 65:
             {
                 console.log('left')
-                player.velocity.x = -10
+                keys.left.pressed = true
                 break
             }
         case 32:
@@ -83,30 +100,30 @@ window.addEventListener('keyup', ({ keyCode }) => {
     switch (keyCode) {
         case 87:
             {
-                console.log('up')
+                console.log('up up')
                 player.velocity.y -= 20
                 break
             }
         case 83:
             {
-                console.log('down')
+                console.log('down up')
                 break
             }
         case 68:
             {
-                console.log('right')
-                player.velocity.x = 0
+                console.log('right up')
+                keys.right.pressed = false
                 break
             }
         case 65:
             {
-                console.log('left')
-                player.velocity.x = 0
+                console.log('left up')
+                keys.left.pressed = false
                 break
             }
         case 32:
             {
-                console.log('spacebar')
+                console.log('spacebar up')
                 break
             }
     }
