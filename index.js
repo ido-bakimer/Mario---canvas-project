@@ -4,8 +4,8 @@ const c = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-const gravity = 0.9
-const friction = 0.97 
+const gravity = 0.9 //values can be changed. the lower the number the slower (more moon walk) will it be
+const friction = 0.93 //the closer to 1, the more slippery stuff will be.
 
 class Player {
     constructor() {
@@ -15,7 +15,7 @@ class Player {
         }
         this.velocity = {
             x: 0,
-            y: -10
+            y: 0
         }
         this.width = 30
         this.height = 30
@@ -36,10 +36,27 @@ class Player {
 
 }
 
+class Platform{  
+    constructor() {
+        this.position = {
+            x:200,
+            y:100
+        }
+        this.width = 200
+        this.height = 20
+    }
+    draw(){
+        c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+}
 
 const player = new Player()
-const keys = {
-    right: {
+const platform = new Platform()
+
+
+const keys = { //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
+    right: {  //it created a small stop before starting to move continusly. so instead of using key down to fire, i use it and keyup to flag here.
         pressed: false
     },
     left: {
@@ -51,6 +68,7 @@ function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
+    platform.draw()
 
 
 	if(keys.right.pressed) {
@@ -58,13 +76,24 @@ function animate() {
 	} else if(keys.left.pressed) {
 		player.velocity.x = -5;
 	} else {
-		player.velocity.x *= friction;
+		player.velocity.x *= friction;    //just realised that by using friction the v value will never 
+        if(Math.abs(player.velocity.x) <= 0.3){ //reach true 0, and that will probably makes some stuff harder down the line
+            player.velocity.x = 0              //so added safe guard, just to be sure, maybe will need fixing later.
+        }
 	}
+    if (player.position.y + player.height <= platform.position.y 
+        && player.position.y + player.height + player.velocity.y >= platform.position.y
+        && player.position.x +player.width >= platform.position.x
+        && player.position.x  <= platform.position.x + platform.width
+        )
+    {player.velocity.y = 0}
 }
 
 animate()
 
-window.addEventListener('keydown', ({ keyCode }) => {
+
+//opted to use keydown and keyup as flags instead of basic fire, lets hope it works
+window.addEventListener('keydown', ({ keyCode }) => { 
     switch (keyCode) {
         case 87:
             {
