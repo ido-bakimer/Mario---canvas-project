@@ -4,7 +4,9 @@ const c = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-const gravity = 0.5
+const gravity = 0.9
+const friction = 0.3 
+
 class Player {
     constructor() {
         this.position = {
@@ -25,6 +27,8 @@ class Player {
 
     update() {
         this.position.y += this.velocity.y
+        this.position.x += this.velocity.x
+        // this.velocity.x *= friction
         this.draw()
         if (this.position.y + this.height + this.velocity.y <= canvas.height) { this.velocity.y += gravity }
         else { this.velocity.y = 0 }
@@ -43,6 +47,67 @@ function animate() {
 
 animate()
 
-window.addEventListener('keydown', (event) =>{
-    console.log(event)
+window.addEventListener('keydown', ({ keyCode }) => {
+    switch (keyCode) {
+        case 87:
+            {
+                console.log('up')
+                player.velocity.y -= 20
+                break
+            }
+        case 83:
+            {
+                console.log('down')
+                break
+            }
+        case 68:
+            {
+                console.log('right')
+                player.velocity.x = 10
+                break
+            }
+        case 65:
+            {
+                console.log('left')
+                player.velocity.x = -10
+                break
+            }
+        case 32:
+            {
+                console.log('spacebar')
+                break
+            }
+    }
+})
+window.addEventListener('keyup', ({ keyCode }) => {
+    switch (keyCode) {
+        case 87:
+            {
+                console.log('up')
+                player.velocity.y -= 20
+                break
+            }
+        case 83:
+            {
+                console.log('down')
+                break
+            }
+        case 68:
+            {
+                console.log('right')
+                player.velocity.x = 0
+                break
+            }
+        case 65:
+            {
+                console.log('left')
+                player.velocity.x = 0
+                break
+            }
+        case 32:
+            {
+                console.log('spacebar')
+                break
+            }
+    }
 })
