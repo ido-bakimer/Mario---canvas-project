@@ -3,8 +3,8 @@ console.log(platform)
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+canvas.width = 1024
+canvas.height = 576
 
 const gravity = 0.9 //values can be changed. the lower the number the slower (more moon walk) will it be
 const friction = 0.93 //the closer to 1, the more slippery stuff will be.
@@ -46,7 +46,7 @@ class Platform{
         }
         this.image = image
         this.width = image.width
-        this.height = 20
+        this.height = image.height
     }
     draw(){
       c.drawImage(this.image,
@@ -79,15 +79,15 @@ const keys = { //key down has a weird bump, it fires one time than only after a 
 
 function animate() {
     requestAnimationFrame(animate)
-    c.clearRect(0, 0, canvas.width, canvas.height)
-    player.update()
+    c.fillStyle = 'white'
+    c.fillRect(0, 0, canvas.width, canvas.height)
     platforms.forEach((platform) =>{
         platform.draw()
     })
 
 
 	if(keys.right.pressed
-        && player.position.x < canvas.width - 700
+        && player.position.x < canvas.width - 500
         ) {
 		player.velocity.x = 5;
 	} else if(keys.left.pressed
@@ -122,6 +122,8 @@ function animate() {
         {player.velocity.y = 0}    })
 
  if (scrollOffset>2000){alert('you won')}
+ player.update()
+
 }
 
 

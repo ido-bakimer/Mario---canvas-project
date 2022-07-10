@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "ffab39d3487de561be1a081fcfb3806d.png");
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "e9ae81ab9b31660dfcb77c0c577c2fe8.png");
 
 /***/ }),
 
@@ -119,8 +119,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 console.log(_assets_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = 1024;
+canvas.height = 576;
 var gravity = 0.9; //values can be changed. the lower the number the slower (more moon walk) will it be
 
 var friction = 0.93; //the closer to 1, the more slippery stuff will be.
@@ -180,7 +180,7 @@ var Platform = /*#__PURE__*/function () {
     };
     this.image = image;
     this.width = image.width;
-    this.height = 20;
+    this.height = image.height;
   }
 
   _createClass(Platform, [{
@@ -223,13 +223,13 @@ var keys = {
 
 function animate() {
   requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  player.update();
+  c.fillStyle = 'white';
+  c.fillRect(0, 0, canvas.width, canvas.height);
   platforms.forEach(function (platform) {
     platform.draw();
   });
 
-  if (keys.right.pressed && player.position.x < canvas.width - 700) {
+  if (keys.right.pressed && player.position.x < canvas.width - 500) {
     player.velocity.x = 5;
   } else if (keys.left.pressed && player.position.x > 350) {
     player.velocity.x = -5;
@@ -265,6 +265,8 @@ function animate() {
   if (scrollOffset > 2000) {
     alert('you won');
   }
+
+  player.update();
 }
 
 var scrollOffset = 0;
