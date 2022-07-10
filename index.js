@@ -34,6 +34,7 @@ const player = new Player()
 
 function animate (){
     requestAnimationFrame(animate)
+    c.clearRect(0,0,canvas.width,canvas.height)
     player.update()
 }
 
