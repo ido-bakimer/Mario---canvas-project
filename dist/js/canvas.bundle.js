@@ -86,16 +86,81 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./assets/platform.png":
-/*!*****************************!*\
-  !*** ./assets/platform.png ***!
-  \*****************************/
+/***/ "./assets/background0.png":
+/*!********************************!*\
+  !*** ./assets/background0.png ***!
+  \********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "e9ae81ab9b31660dfcb77c0c577c2fe8.png");
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "0f4783d5d6fd770797e31809fa444daf.png");
+
+/***/ }),
+
+/***/ "./assets/background1.png":
+/*!********************************!*\
+  !*** ./assets/background1.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "bd0f5596d05688a16b78c4708c623100.png");
+
+/***/ }),
+
+/***/ "./assets/background2.png":
+/*!********************************!*\
+  !*** ./assets/background2.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "244de94c8cd59b47a194418e688daaa9.png");
+
+/***/ }),
+
+/***/ "./assets/background3.png":
+/*!********************************!*\
+  !*** ./assets/background3.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "69f0701d304389715bf111e21359bed7.png");
+
+/***/ }),
+
+/***/ "./assets/background4.png":
+/*!********************************!*\
+  !*** ./assets/background4.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "5b87bf8c6b9f26e53fe55fb756f77886.png");
+
+/***/ }),
+
+/***/ "./assets/platformislandbig.png":
+/*!**************************************!*\
+  !*** ./assets/platformislandbig.png ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "0ffe3b8e64c46cfb06ae44101a401763.png");
 
 /***/ }),
 
@@ -108,7 +173,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _assets_platform_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assets/platform.png */ "./assets/platform.png");
+/* harmony import */ var _assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assets/platformislandbig.png */ "./assets/platformislandbig.png");
+/* harmony import */ var _assets_background0_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/background0.png */ "./assets/background0.png");
+/* harmony import */ var _assets_background1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/background1.png */ "./assets/background1.png");
+/* harmony import */ var _assets_background2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/background2.png */ "./assets/background2.png");
+/* harmony import */ var _assets_background3_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/background3.png */ "./assets/background3.png");
+/* harmony import */ var _assets_background4_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../assets/background4.png */ "./assets/background4.png");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -116,7 +186,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 
-console.log(_assets_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+
+
+
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 canvas.width = 1024;
@@ -157,9 +231,8 @@ var Player = /*#__PURE__*/function () {
 
       if (this.position.y + this.height + this.velocity.y <= canvas.height) {
         this.velocity.y += gravity;
-      } else {
-        this.velocity.y = 0;
-      }
+      } // else { this.velocity.y = 0 }
+
     }
   }]);
 
@@ -194,21 +267,82 @@ var Platform = /*#__PURE__*/function () {
   return Platform;
 }();
 
-var image = new Image();
-image.src = _assets_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"];
+function createImage(imageSrc) {
+  var image = new Image();
+  image.src = imageSrc;
+  return image;
+}
+
 var player = new Player();
 var platforms = [new Platform({
   x: 200,
   y: 100,
-  image: image
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
 }), new Platform({
-  x: 100,
+  x: 1000,
+  y: 400,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: 1750,
   y: 500,
-  image: image
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
 }), new Platform({
   x: 400,
   y: 300,
-  image: image
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: -50,
+  y: 500,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+})];
+
+var GenericObj = /*#__PURE__*/function () {
+  function GenericObj(_ref2) {
+    var x = _ref2.x,
+        y = _ref2.y,
+        image = _ref2.image;
+
+    _classCallCheck(this, GenericObj);
+
+    this.position = {
+      x: x,
+      y: y
+    };
+    this.image = image;
+    this.width = image.width;
+    this.height = image.height;
+  }
+
+  _createClass(GenericObj, [{
+    key: "draw",
+    value: function draw() {
+      c.drawImage(this.image, this.position.x, this.position.y);
+    }
+  }]);
+
+  return GenericObj;
+}();
+
+var GenericObjs = [new GenericObj({
+  x: -300,
+  y: 0,
+  image: createImage(_assets_background0_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+}), new GenericObj({
+  x: -300,
+  y: 100,
+  image: createImage(_assets_background4_png__WEBPACK_IMPORTED_MODULE_5__["default"])
+}), new GenericObj({
+  x: -300,
+  y: 0,
+  image: createImage(_assets_background3_png__WEBPACK_IMPORTED_MODULE_4__["default"])
+}), new GenericObj({
+  x: -300,
+  y: 0,
+  image: createImage(_assets_background2_png__WEBPACK_IMPORTED_MODULE_3__["default"])
+}), new GenericObj({
+  x: -300,
+  y: 350,
+  image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_2__["default"])
 })];
 var keys = {
   //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
@@ -225,6 +359,9 @@ function animate() {
   requestAnimationFrame(animate);
   c.fillStyle = 'white';
   c.fillRect(0, 0, canvas.width, canvas.height);
+  GenericObjs.forEach(function (GenericObj) {
+    GenericObj.draw();
+  });
   platforms.forEach(function (platform) {
     platform.draw();
   });
@@ -246,6 +383,9 @@ function animate() {
       platforms.forEach(function (platform) {
         platform.position.x -= 5;
       });
+      GenericObjs.forEach(function (platform) {
+        platform.position.x -= 2;
+      });
     }
 
     if (keys.left.pressed) {
@@ -253,27 +393,34 @@ function animate() {
       platforms.forEach(function (platform) {
         platform.position.x += 5;
       });
+      GenericObjs.forEach(function (platform) {
+        platform.position.x += 2;
+      });
     }
   }
 
   platforms.forEach(function (platform) {
-    if (player.position.y + player.height <= platform.position.y && player.position.y + player.height + player.velocity.y >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
+    if (player.position.y + player.height - 30 <= platform.position.y && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
       player.velocity.y = 0;
     }
-  });
+  }); //win condition
 
   if (scrollOffset > 2000) {
     alert('you won');
   }
 
-  player.update();
+  if (player.position.y > canvas.height) {
+    console.log('you lose');
+  }
+
+  player.update(); //lose condition
 }
 
 var scrollOffset = 0;
 animate(); //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
 
-window.addEventListener('keydown', function (_ref2) {
-  var keyCode = _ref2.keyCode;
+window.addEventListener('keydown', function (_ref3) {
+  var keyCode = _ref3.keyCode;
 
   switch (keyCode) {
     case 87:
@@ -310,8 +457,8 @@ window.addEventListener('keydown', function (_ref2) {
       }
   }
 });
-window.addEventListener('keyup', function (_ref3) {
-  var keyCode = _ref3.keyCode;
+window.addEventListener('keyup', function (_ref4) {
+  var keyCode = _ref4.keyCode;
 
   switch (keyCode) {
     case 87:
