@@ -86,6 +86,19 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./assets/Platform.png":
+/*!*****************************!*\
+  !*** ./assets/Platform.png ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "e9ae81ab9b31660dfcb77c0c577c2fe8.png");
+
+/***/ }),
+
 /***/ "./assets/background0.png":
 /*!********************************!*\
   !*** ./assets/background0.png ***!
@@ -121,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "244de94c8cd59b47a194418e688daaa9.png");
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "82f51a723af0848064805d046c9cca42.png");
 
 /***/ }),
 
@@ -174,16 +187,18 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assets/platformislandbig.png */ "./assets/platformislandbig.png");
-/* harmony import */ var _assets_background0_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/background0.png */ "./assets/background0.png");
-/* harmony import */ var _assets_background1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/background1.png */ "./assets/background1.png");
-/* harmony import */ var _assets_background2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/background2.png */ "./assets/background2.png");
-/* harmony import */ var _assets_background3_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/background3.png */ "./assets/background3.png");
-/* harmony import */ var _assets_background4_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../assets/background4.png */ "./assets/background4.png");
+/* harmony import */ var _assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/Platform.png */ "./assets/Platform.png");
+/* harmony import */ var _assets_background0_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/background0.png */ "./assets/background0.png");
+/* harmony import */ var _assets_background1_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/background1.png */ "./assets/background1.png");
+/* harmony import */ var _assets_background2_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/background2.png */ "./assets/background2.png");
+/* harmony import */ var _assets_background3_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../assets/background3.png */ "./assets/background3.png");
+/* harmony import */ var _assets_background4_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../assets/background4.png */ "./assets/background4.png");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -215,6 +230,7 @@ var Player = /*#__PURE__*/function () {
     };
     this.width = 30;
     this.height = 30;
+    this.speed = 10;
   }
 
   _createClass(Player, [{
@@ -296,48 +312,8 @@ var GenericObj = /*#__PURE__*/function () {
   return GenericObj;
 }();
 
-var platforms = [new Platform({
-  x: 200,
-  y: 100,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 1000,
-  y: 400,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 1750,
-  y: 500,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 400,
-  y: 300,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: -50,
-  y: 500,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-})];
-var GenericObjs = [new GenericObj({
-  x: -300,
-  y: 0,
-  image: createImage(_assets_background0_png__WEBPACK_IMPORTED_MODULE_1__["default"])
-}), new GenericObj({
-  x: -300,
-  y: 100,
-  image: createImage(_assets_background4_png__WEBPACK_IMPORTED_MODULE_5__["default"])
-}), new GenericObj({
-  x: -300,
-  y: 0,
-  image: createImage(_assets_background3_png__WEBPACK_IMPORTED_MODULE_4__["default"])
-}), new GenericObj({
-  x: -300,
-  y: 0,
-  image: createImage(_assets_background2_png__WEBPACK_IMPORTED_MODULE_3__["default"])
-}), new GenericObj({
-  x: -300,
-  y: 350,
-  image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_2__["default"])
-})];
+var platforms = [];
+var GenericObjs = [];
 var keys = {
   //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
   right: {
@@ -361,9 +337,9 @@ function animate() {
   });
 
   if (keys.right.pressed && player.position.x < canvas.width - 500) {
-    player.velocity.x = 5;
+    player.velocity.x = player.speed;
   } else if (keys.left.pressed && player.position.x > 350) {
-    player.velocity.x = -5;
+    player.velocity.x = -player.speed;
   } else {
     player.velocity.x *= friction; //just realised that by using friction the v value will never 
 
@@ -373,22 +349,22 @@ function animate() {
     }
 
     if (keys.right.pressed) {
-      scrollOffset += 5;
+      scrollOffset += player.speed;
       platforms.forEach(function (platform) {
-        platform.position.x -= 5;
+        platform.position.x -= player.speed;
       });
       GenericObjs.forEach(function (platform) {
-        platform.position.x -= 2;
+        platform.position.x -= player.speed * .66;
       });
     }
 
     if (keys.left.pressed) {
-      scrollOffset -= 5;
+      scrollOffset -= player.speed;
       platforms.forEach(function (platform) {
-        platform.position.x += 5;
+        platform.position.x += player.speed;
       });
       GenericObjs.forEach(function (platform) {
-        platform.position.x += 2;
+        platform.position.x += player.speed * .66;
       });
     }
   }
@@ -399,8 +375,8 @@ function animate() {
     }
   }); //win condition
 
-  if (scrollOffset > 2000) {
-    alert('you won');
+  if (scrollOffset > 4200) {
+    console.log('you won');
   } //lose condition
 
 
@@ -433,27 +409,75 @@ function init() {
     x: -50,
     y: 500,
     image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 2250,
+    y: 300,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new Platform({
+    x: 2050,
+    y: 450,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new Platform({
+    x: 2050,
+    y: 150,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new Platform({
+    x: 2350,
+    y: 80,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new Platform({
+    x: 2950,
+    y: 250,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 3150,
+    y: 400,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 3550,
+    y: 400,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 3950,
+    y: 400,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 4650,
+    y: 200,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 4350,
+    y: 400,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 3700,
+    y: 300,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new Platform({
+    x: 4300,
+    y: 300,
+    image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
   })];
   GenericObjs = [new GenericObj({
     x: -300,
     y: 0,
-    image: createImage(_assets_background0_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+    image: createImage(_assets_background0_png__WEBPACK_IMPORTED_MODULE_2__["default"])
   }), new GenericObj({
     x: -300,
     y: 100,
-    image: createImage(_assets_background4_png__WEBPACK_IMPORTED_MODULE_5__["default"])
+    image: createImage(_assets_background4_png__WEBPACK_IMPORTED_MODULE_6__["default"])
   }), new GenericObj({
     x: -300,
     y: 0,
-    image: createImage(_assets_background3_png__WEBPACK_IMPORTED_MODULE_4__["default"])
+    image: createImage(_assets_background3_png__WEBPACK_IMPORTED_MODULE_5__["default"])
   }), new GenericObj({
     x: -300,
     y: 0,
-    image: createImage(_assets_background2_png__WEBPACK_IMPORTED_MODULE_3__["default"])
+    image: createImage(_assets_background2_png__WEBPACK_IMPORTED_MODULE_4__["default"])
   }), new GenericObj({
     x: -300,
     y: 350,
-    image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_2__["default"])
+    image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_3__["default"])
   })];
   player = new Player();
   scrollOffset = 0;
@@ -543,6 +567,7 @@ function createImage(imageSrc) {
 }
 
 var player = new Player();
+init();
 animate();
 
 /***/ })

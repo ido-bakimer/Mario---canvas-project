@@ -1,4 +1,5 @@
-import platform from '../../assets/platformislandbig.png'
+import platformIsland from '../../assets/platformislandbig.png'
+import platform from '../../assets/Platform.png'
 import main_background from '../../assets/background0.png'
 import background1 from '../../assets/background1.png'
 import background2 from '../../assets/background2.png'
@@ -31,6 +32,7 @@ class Player {
         }
         this.width = 30
         this.height = 30
+        this.speed = 10
     }
     draw() {
         c.fillStyle = 'red'
@@ -86,21 +88,10 @@ class GenericObj {
 
 
 let platforms = [
-    new Platform({ x: 200, y: 100, image: createImage(platform) }),
-    new Platform({ x: 1000, y: 400, image: createImage(platform) }),
-    new Platform({ x: 1750, y: 500, image: createImage(platform) }),
-    new Platform({ x: 400, y: 300, image: createImage(platform) }),
-    new Platform({ x: -50, y: 500, image: createImage(platform) }),
 
 ]
 
 let GenericObjs = [
-    new GenericObj({ x: -300, y: 0, image: createImage(main_background) },),
-    new GenericObj({ x: -300, y: 100, image: createImage(background4) }),
-    new GenericObj({ x: -300, y: 0, image: createImage(background3) }),
-    new GenericObj({ x: -300, y: 0, image: createImage(background2) }),
-    new GenericObj({ x: -300, y: 350, image: createImage(background1) }),
-
 ]
 
 const keys = { //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
@@ -128,32 +119,32 @@ function animate() {
     if (keys.right.pressed
         && player.position.x < canvas.width - 500
     ) {
-        player.velocity.x = 5;
+        player.velocity.x = player.speed;
     } else if (keys.left.pressed
         && player.position.x > 350
     ) {
-        player.velocity.x = -5;
+        player.velocity.x = -player.speed;
     } else {
         player.velocity.x *= friction;    //just realised that by using friction the v value will never 
         if (Math.abs(player.velocity.x) <= 0.3) { //reach true 0, and that will probably makes some stuff harder down the line
             player.velocity.x = 0              //so added safe guard, just to be sure, maybe will need fixing later.
         }
         if (keys.right.pressed) {
-            scrollOffset += 5
+            scrollOffset += player.speed
             platforms.forEach((platform) => {
-                platform.position.x -= 5
+                platform.position.x -= player.speed
             })
             GenericObjs.forEach((platform) => {
-                platform.position.x -= 2
+                platform.position.x -= player.speed * .66
             })
         }
         if (keys.left.pressed) {
-            scrollOffset -= 5
+            scrollOffset -= player.speed
             platforms.forEach((platform) => {
-                platform.position.x += 5
+                platform.position.x += player.speed
             })
             GenericObjs.forEach((platform) => {
-                platform.position.x += 2
+                platform.position.x += player.speed * .66
             })
         }
     }
@@ -166,8 +157,8 @@ function animate() {
         ) { player.velocity.y = 0 }
     })
     //win condition
-    if (scrollOffset > 2000) {
-         alert('you won') }
+    if (scrollOffset > 4200) {
+         console.log('you won') }
 
     //lose condition
     if (player.position.y > canvas.height) {
@@ -182,11 +173,25 @@ function animate() {
 
 function init(){
     platforms = [
-        new Platform({ x: 200, y: 100, image: createImage(platform) }),
-        new Platform({ x: 1000, y: 400, image: createImage(platform) }),
-        new Platform({ x: 1750, y: 500, image: createImage(platform) }),
-        new Platform({ x: 400, y: 300, image: createImage(platform) }),
-        new Platform({ x: -50, y: 500, image: createImage(platform) }),
+        new Platform({ x: 200, y: 100, image: createImage(platformIsland) }),
+        new Platform({ x: 1000, y: 400, image: createImage(platformIsland) }),
+        new Platform({ x: 1750, y: 500, image: createImage(platformIsland) }),
+        new Platform({ x: 400, y: 300, image: createImage(platformIsland) }),
+        new Platform({ x: -50, y: 500, image: createImage(platformIsland) }),
+        new Platform({ x: 2250, y: 300, image: createImage(platform) }),
+        new Platform({ x: 2050, y: 450, image: createImage(platform) }),
+        new Platform({ x: 2050, y: 150, image: createImage(platform) }),
+        new Platform({ x: 2350, y: 80, image: createImage(platform) }),
+        new Platform({ x: 2950, y: 250, image: createImage(platformIsland) }),
+        new Platform({ x: 3150, y: 400, image: createImage(platformIsland) }),
+        new Platform({ x: 3550, y: 400, image: createImage(platformIsland) }),
+        new Platform({ x: 3950, y: 400, image: createImage(platformIsland) }),
+        new Platform({ x: 4650, y: 200, image: createImage(platformIsland) }),
+        new Platform({ x: 4350, y: 400, image: createImage(platformIsland) }),
+        new Platform({ x: 3700, y: 300, image: createImage(platform) }),
+        new Platform({ x: 4300, y: 300, image: createImage(platform) }),
+
+
     
     ]
     
@@ -208,7 +213,7 @@ function init(){
 window.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
         case 87:
-            {
+            {  
                 console.log('up')
                 player.velocity.y -= 20
                 break
@@ -277,4 +282,5 @@ function createImage(imageSrc) {
 
 let player = new Player()
 
+init()
 animate()
