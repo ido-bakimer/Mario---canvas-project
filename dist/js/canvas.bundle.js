@@ -164,6 +164,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./assets/idleleft.png":
+/*!*****************************!*\
+  !*** ./assets/idleleft.png ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "c8b5f6b74b767755f1bb7ed5ddf7e088.png");
+
+/***/ }),
+
+/***/ "./assets/idleright.png":
+/*!******************************!*\
+  !*** ./assets/idleright.png ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "5bfd862f2536972f72650149e94c5e52.png");
+
+/***/ }),
+
 /***/ "./assets/platformislandbig.png":
 /*!**************************************!*\
   !*** ./assets/platformislandbig.png ***!
@@ -174,6 +200,32 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "0ffe3b8e64c46cfb06ae44101a401763.png");
+
+/***/ }),
+
+/***/ "./assets/runningleft.png":
+/*!********************************!*\
+  !*** ./assets/runningleft.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "815ce50ab444cba159cb6e7efb4909e2.png");
+
+/***/ }),
+
+/***/ "./assets/runningright.png":
+/*!*********************************!*\
+  !*** ./assets/runningright.png ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "4f7dfc907551aa0de21be40efa9369b8.png");
 
 /***/ }),
 
@@ -193,11 +245,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets_background2_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/background2.png */ "./assets/background2.png");
 /* harmony import */ var _assets_background3_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../assets/background3.png */ "./assets/background3.png");
 /* harmony import */ var _assets_background4_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../assets/background4.png */ "./assets/background4.png");
+/* harmony import */ var _assets_idleleft_png__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../assets/idleleft.png */ "./assets/idleleft.png");
+/* harmony import */ var _assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../assets/idleright.png */ "./assets/idleright.png");
+/* harmony import */ var _assets_runningleft_png__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../assets/runningleft.png */ "./assets/runningleft.png");
+/* harmony import */ var _assets_runningright_png__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../assets/runningright.png */ "./assets/runningright.png");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
 
 
 
@@ -212,7 +272,7 @@ canvas.width = 1024;
 canvas.height = 576;
 var gravity = 0.9; //values can be changed. the lower the number the slower (more moon walk) will it be
 
-var friction = 0.93; //the closer to 1, the more slippery stuff will be.
+var friction = 0.90; //the closer to 1, the more slippery stuff will be.
 
 var scrollOffset = 0;
 
@@ -228,22 +288,45 @@ var Player = /*#__PURE__*/function () {
       x: 0,
       y: 0
     };
-    this.width = 30;
-    this.height = 30;
+    this.width = 45;
+    this.height = 80;
     this.speed = 10;
+    this.image = createImage(_assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__["default"]);
+    this.frames = 0;
+    this.sprites = {
+      stand: {
+        right: createImage(_assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__["default"]),
+        left: createImage(_assets_idleleft_png__WEBPACK_IMPORTED_MODULE_7__["default"]),
+        cropStart: 30,
+        cropEnd: 50
+      },
+      run: {
+        right: createImage(_assets_runningright_png__WEBPACK_IMPORTED_MODULE_10__["default"]),
+        left: createImage(_assets_runningleft_png__WEBPACK_IMPORTED_MODULE_9__["default"]),
+        cropStart: 0,
+        cropEnd: 50
+      }
+    };
+    this.currentSprite = this.sprites.stand.right;
+    this.currentCropStart = this.sprites.stand.cropStart;
+    this.currentCropEnd = this.sprites.stand.cropEnd;
   }
 
   _createClass(Player, [{
     key: "draw",
     value: function draw() {
-      c.fillStyle = 'red';
-      c.fillRect(this.position.x, this.position.y, this.width, this.height);
+      // c.fillStyle = 'blue'
+      // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+      c.drawImage(this.currentSprite, this.currentCropStart + 80 * this.frames, 0, this.currentCropEnd, 74, this.position.x, this.position.y, this.width, this.height);
     }
   }, {
     key: "update",
     value: function update() {
+      this.frames++;
       this.position.y += this.velocity.y;
       this.position.x += this.velocity.x; // this.velocity.x *= friction
+
+      if (this.frames > 35) this.frames = 0; // console.log(this.frames)
 
       this.draw();
 
@@ -338,7 +421,7 @@ function animate() {
 
   if (keys.right.pressed && player.position.x < canvas.width - 500) {
     player.velocity.x = player.speed;
-  } else if (keys.left.pressed && player.position.x > 350) {
+  } else if (keys.left.pressed && player.position.x > 350 || keys.left.pressed && scrollOffset === 0 && player.position.x > 0) {
     player.velocity.x = -player.speed;
   } else {
     player.velocity.x *= friction; //just realised that by using friction the v value will never 
@@ -356,9 +439,7 @@ function animate() {
       GenericObjs.forEach(function (platform) {
         platform.position.x -= player.speed * .66;
       });
-    }
-
-    if (keys.left.pressed) {
+    } else if (keys.left.pressed && scrollOffset > 0) {
       scrollOffset -= player.speed;
       platforms.forEach(function (platform) {
         platform.position.x += player.speed;
@@ -370,13 +451,14 @@ function animate() {
   }
 
   platforms.forEach(function (platform) {
-    if (player.position.y + player.height - 30 <= platform.position.y && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
+    if (player.position.y + player.height - 20 <= platform.position.y && player.position.y + player.height + player.velocity.y - 20 >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
       player.velocity.y = 0;
     }
   }); //win condition
 
   if (scrollOffset > 4200) {
-    console.log('you won');
+    alert('you won!');
+    init();
   } //lose condition
 
 
@@ -489,29 +571,44 @@ window.addEventListener('keydown', function (_ref3) {
 
   switch (keyCode) {
     case 87:
+    case 38:
       {
-        console.log('up');
-        player.velocity.y -= 20;
-        break;
+        if (Math.abs(player.velocity.y) > 1) {
+          console.log('no jump');
+          break;
+        } else {
+          player.velocity.y -= 20;
+          console.log('jump!');
+          break;
+        }
       }
 
     case 83:
+    case 40:
       {
         console.log('down');
         break;
       }
 
     case 68:
+    case 39:
       {
         console.log('right');
         keys.right.pressed = true;
+        player.currentSprite = player.sprites.run.right;
+        player.currentCropStart = player.sprites.run.cropStart;
+        player.currentCropEnd = player.sprites.run.cropEnd;
         break;
       }
 
     case 65:
+    case 37:
       {
         console.log('left');
         keys.left.pressed = true;
+        player.currentSprite = player.sprites.run.left;
+        player.currentCropStart = player.sprites.run.cropStart;
+        player.currentCropEnd = player.sprites.run.cropEnd;
         break;
       }
 
@@ -524,31 +621,42 @@ window.addEventListener('keydown', function (_ref3) {
 });
 window.addEventListener('keyup', function (_ref4) {
   var keyCode = _ref4.keyCode;
+  console.log(keyCode);
 
   switch (keyCode) {
     case 87:
+    case 38:
       {
         console.log('up up');
         break;
       }
 
     case 83:
+    case 40:
       {
         console.log('down up');
         break;
       }
 
     case 68:
+    case 39:
       {
         console.log('right up');
         keys.right.pressed = false;
+        player.currentSprite = player.sprites.stand.right;
+        player.currentCropStart = player.sprites.stand.cropStart;
+        player.currentCropEnd = player.sprites.stand.cropEnd;
         break;
       }
 
     case 65:
+    case 37:
       {
         console.log('left up');
         keys.left.pressed = false;
+        player.currentSprite = player.sprites.stand.left;
+        player.currentCropStart = player.sprites.stand.cropStart;
+        player.currentCropEnd = player.sprites.stand.cropEnd;
         break;
       }
 

@@ -1,10 +1,16 @@
 import platformIsland from '../../assets/platformislandbig.png'
 import platform from '../../assets/Platform.png'
+
 import main_background from '../../assets/background0.png'
 import background1 from '../../assets/background1.png'
 import background2 from '../../assets/background2.png'
 import background3 from '../../assets/background3.png'
 import background4 from '../../assets/background4.png'
+
+import spriteIdleLeft from '../../assets/idleleft.png'
+import spriteIdleRight from '../../assets/idleright.png'
+import spriteRunningLeft from '../../assets/runningleft.png'
+import spriteRunningRight from '../../assets/runningright.png'
 
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
@@ -14,7 +20,7 @@ canvas.height = 576
 
 
 const gravity = 0.9 //values can be changed. the lower the number the slower (more moon walk) will it be
-const friction = 0.93 //the closer to 1, the more slippery stuff will be.
+const friction = 0.90 //the closer to 1, the more slippery stuff will be.
 
 let scrollOffset = 0
 
@@ -30,19 +36,54 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 30
-        this.height = 30
+        this.width = 45
+        this.height = 80
         this.speed = 10
+        this.image = createImage(spriteIdleRight)
+        this.frames = 0
+        this.sprites = {
+         stand : {
+            right: createImage(spriteIdleRight),
+            left: createImage(spriteIdleLeft),
+            cropStart:30,
+            cropEnd: 50 ,
+         }   ,
+         run: {
+            right: createImage(spriteRunningRight),
+            left: createImage(spriteRunningLeft),
+            cropStart:0,
+            cropEnd: 50 ,
+         }
+        }
+         this.currentSprite = this.sprites.stand.right
+         this.currentCropStart = this.sprites.stand.cropStart
+         this.currentCropEnd = this.sprites.stand.cropEnd
+
+
     }
     draw() {
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle = 'blue'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(
+            this.currentSprite,
+            this.currentCropStart + 80*this.frames ,
+            0,
+            this.currentCropEnd,
+            74,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height)
     }
 
     update() {
+        this.frames ++
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
         // this.velocity.x *= friction
+        if (this.frames > 35) this.frames = 0
+        // console.log(this.frames)
+
         this.draw()
         if (this.position.y + this.height + this.velocity.y <= canvas.height) { this.velocity.y += gravity }
         // else { this.velocity.y = 0 }
@@ -120,9 +161,7 @@ function animate() {
         && player.position.x < canvas.width - 500
     ) {
         player.velocity.x = player.speed;
-    } else if (keys.left.pressed
-        && player.position.x > 350
-    ) {
+    } else if ((keys.left.pressed && player.position.x > 350)|| (keys.left.pressed && scrollOffset===0 && player.position.x > 0)) {
         player.velocity.x = -player.speed;
     } else {
         player.velocity.x *= friction;    //just realised that by using friction the v value will never 
@@ -138,7 +177,7 @@ function animate() {
                 platform.position.x -= player.speed * .66
             })
         }
-        if (keys.left.pressed) {
+        else if (keys.left.pressed && scrollOffset >0) {
             scrollOffset -= player.speed
             platforms.forEach((platform) => {
                 platform.position.x += player.speed
@@ -150,15 +189,17 @@ function animate() {
     }
 
     platforms.forEach((platform) => {
-        if (player.position.y + player.height - 30 <= platform.position.y
-            && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y
+        if (player.position.y + player.height -20 <= platform.position.y
+            && player.position.y + player.height + player.velocity.y -20  >= platform.position.y
             && player.position.x + player.width >= platform.position.x
             && player.position.x <= platform.position.x + platform.width
         ) { player.velocity.y = 0 }
     })
     //win condition
     if (scrollOffset > 4200) {
-         console.log('you won') }
+        alert('you won!')
+        init()
+          }
 
     //lose condition
     if (player.position.y > canvas.height) {
@@ -212,27 +253,39 @@ function init(){
 //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
 window.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
-        case 87:
+        case 87: case 38:
             {  
-                console.log('up')
-                player.velocity.y -= 20
+                if (Math.abs(player.velocity.y) > 1) { 
+                    console.log('no jump')
                 break
+                }
+                else{  
+                player.velocity.y -= 20
+                console.log('jump!')
+                break}
+              
             }
-        case 83:
+        case 83: case 40:
             {
                 console.log('down')
                 break
             }
-        case 68:
+        case 68: case 39:
             {
                 console.log('right')
                 keys.right.pressed = true
+                player.currentSprite = player.sprites.run.right
+                player.currentCropStart = player.sprites.run.cropStart
+                player.currentCropEnd = player.sprites.run.cropEnd
                 break
             }
-        case 65:
+        case 65: case 37:
             {
                 console.log('left')
                 keys.left.pressed = true
+                player.currentSprite = player.sprites.run.left
+                player.currentCropStart = player.sprites.run.cropStart
+                player.currentCropEnd = player.sprites.run.cropEnd
                 break
             }
         case 32:
@@ -243,27 +296,34 @@ window.addEventListener('keydown', ({ keyCode }) => {
     }
 })
 window.addEventListener('keyup', ({ keyCode }) => {
+    console.log(keyCode)
     switch (keyCode) {
-        case 87:
+        case 87: case 38:
             {
                 console.log('up up')
                 break
             }
-        case 83:
+        case 83: case 40:
             {
                 console.log('down up')
                 break
             }
-        case 68:
+        case 68: case 39:
             {
                 console.log('right up')
                 keys.right.pressed = false
+                player.currentSprite = player.sprites.stand.right
+                player.currentCropStart = player.sprites.stand.cropStart
+                player.currentCropEnd = player.sprites.stand.cropEnd
                 break
             }
-        case 65:
+        case 65: case 37:
             {
                 console.log('left up')
                 keys.left.pressed = false
+                player.currentSprite = player.sprites.stand.left
+                player.currentCropStart = player.sprites.stand.cropStart
+                player.currentCropEnd = player.sprites.stand.cropEnd
                 break
             }
         case 32:
