@@ -199,6 +199,8 @@ var gravity = 0.9; //values can be changed. the lower the number the slower (mor
 
 var friction = 0.93; //the closer to 1, the more slippery stuff will be.
 
+var scrollOffset = 0;
+
 var Player = /*#__PURE__*/function () {
   function Player() {
     _classCallCheck(this, Player);
@@ -267,35 +269,6 @@ var Platform = /*#__PURE__*/function () {
   return Platform;
 }();
 
-function createImage(imageSrc) {
-  var image = new Image();
-  image.src = imageSrc;
-  return image;
-}
-
-var player = new Player();
-var platforms = [new Platform({
-  x: 200,
-  y: 100,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 1000,
-  y: 400,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 1750,
-  y: 500,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: 400,
-  y: 300,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-}), new Platform({
-  x: -50,
-  y: 500,
-  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
-})];
-
 var GenericObj = /*#__PURE__*/function () {
   function GenericObj(_ref2) {
     var x = _ref2.x,
@@ -323,6 +296,27 @@ var GenericObj = /*#__PURE__*/function () {
   return GenericObj;
 }();
 
+var platforms = [new Platform({
+  x: 200,
+  y: 100,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: 1000,
+  y: 400,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: 1750,
+  y: 500,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: 400,
+  y: 300,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+}), new Platform({
+  x: -50,
+  y: 500,
+  image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+})];
 var GenericObjs = [new GenericObj({
   x: -300,
   y: 0,
@@ -407,17 +401,64 @@ function animate() {
 
   if (scrollOffset > 2000) {
     alert('you won');
-  }
+  } //lose condition
+
 
   if (player.position.y > canvas.height) {
     console.log('you lose');
+    init();
   }
 
-  player.update(); //lose condition
+  player.update();
 }
 
-var scrollOffset = 0;
-animate(); //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
+function init() {
+  platforms = [new Platform({
+    x: 200,
+    y: 100,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 1000,
+    y: 400,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 1750,
+    y: 500,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: 400,
+    y: 300,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }), new Platform({
+    x: -50,
+    y: 500,
+    image: createImage(_assets_platformislandbig_png__WEBPACK_IMPORTED_MODULE_0__["default"])
+  })];
+  GenericObjs = [new GenericObj({
+    x: -300,
+    y: 0,
+    image: createImage(_assets_background0_png__WEBPACK_IMPORTED_MODULE_1__["default"])
+  }), new GenericObj({
+    x: -300,
+    y: 100,
+    image: createImage(_assets_background4_png__WEBPACK_IMPORTED_MODULE_5__["default"])
+  }), new GenericObj({
+    x: -300,
+    y: 0,
+    image: createImage(_assets_background3_png__WEBPACK_IMPORTED_MODULE_4__["default"])
+  }), new GenericObj({
+    x: -300,
+    y: 0,
+    image: createImage(_assets_background2_png__WEBPACK_IMPORTED_MODULE_3__["default"])
+  }), new GenericObj({
+    x: -300,
+    y: 350,
+    image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_2__["default"])
+  })];
+  player = new Player();
+  scrollOffset = 0;
+} //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
+
 
 window.addEventListener('keydown', function (_ref3) {
   var keyCode = _ref3.keyCode;
@@ -494,6 +535,15 @@ window.addEventListener('keyup', function (_ref4) {
       }
   }
 });
+
+function createImage(imageSrc) {
+  var image = new Image();
+  image.src = imageSrc;
+  return image;
+}
+
+var player = new Player();
+animate();
 
 /***/ })
 

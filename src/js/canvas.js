@@ -11,8 +11,11 @@ const c = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
+
 const gravity = 0.9 //values can be changed. the lower the number the slower (more moon walk) will it be
 const friction = 0.93 //the closer to 1, the more slippery stuff will be.
+
+let scrollOffset = 0
 
 
 
@@ -64,23 +67,6 @@ class Platform {
     }
 }
 
-function createImage(imageSrc) {
-    const image = new Image()
-    image.src = imageSrc
-    return image
-}
-
-const player = new Player()
-
-const platforms = [
-    new Platform({ x: 200, y: 100, image: createImage(platform) }),
-    new Platform({ x: 1000, y: 400, image: createImage(platform) }),
-    new Platform({ x: 1750, y: 500, image: createImage(platform) }),
-    new Platform({ x: 400, y: 300, image: createImage(platform) }),
-    new Platform({ x: -50, y: 500, image: createImage(platform) }),
-
-]
-
 class GenericObj {
     constructor({ x, y, image }) {
         this.position = {
@@ -98,7 +84,17 @@ class GenericObj {
     }
 }
 
-const GenericObjs = [
+
+let platforms = [
+    new Platform({ x: 200, y: 100, image: createImage(platform) }),
+    new Platform({ x: 1000, y: 400, image: createImage(platform) }),
+    new Platform({ x: 1750, y: 500, image: createImage(platform) }),
+    new Platform({ x: 400, y: 300, image: createImage(platform) }),
+    new Platform({ x: -50, y: 500, image: createImage(platform) }),
+
+]
+
+let GenericObjs = [
     new GenericObj({ x: -300, y: 0, image: createImage(main_background) },),
     new GenericObj({ x: -300, y: 100, image: createImage(background4) }),
     new GenericObj({ x: -300, y: 0, image: createImage(background3) }),
@@ -163,27 +159,50 @@ function animate() {
     }
 
     platforms.forEach((platform) => {
-        if (player.position.y + player.height -30 <= platform.position.y
-            && player.position.y + player.height + player.velocity.y -30>= platform.position.y
+        if (player.position.y + player.height - 30 <= platform.position.y
+            && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y
             && player.position.x + player.width >= platform.position.x
             && player.position.x <= platform.position.x + platform.width
         ) { player.velocity.y = 0 }
     })
-   //win condition
-    if (scrollOffset > 2000) { alert('you won') }
-    if (player.position.y > canvas.height) {console.log('you lose')}
-    player.update()
+    //win condition
+    if (scrollOffset > 2000) {
+         alert('you won') }
+
     //lose condition
+    if (player.position.y > canvas.height) {
+         console.log('you lose') 
+         init() 
+        }
+         
+    player.update()
 
 
 }
 
+function init(){
+    platforms = [
+        new Platform({ x: 200, y: 100, image: createImage(platform) }),
+        new Platform({ x: 1000, y: 400, image: createImage(platform) }),
+        new Platform({ x: 1750, y: 500, image: createImage(platform) }),
+        new Platform({ x: 400, y: 300, image: createImage(platform) }),
+        new Platform({ x: -50, y: 500, image: createImage(platform) }),
+    
+    ]
+    
+    GenericObjs = [
+        new GenericObj({ x: -300, y: 0, image: createImage(main_background) },),
+        new GenericObj({ x: -300, y: 100, image: createImage(background4) }),
+        new GenericObj({ x: -300, y: 0, image: createImage(background3) }),
+        new GenericObj({ x: -300, y: 0, image: createImage(background2) }),
+        new GenericObj({ x: -300, y: 350, image: createImage(background1) }),
+    
+    ]
 
-let scrollOffset = 0
+    player = new Player()
 
-
-animate()
-
+    scrollOffset = 0
+}
 
 //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
 window.addEventListener('keydown', ({ keyCode }) => {
@@ -249,3 +268,13 @@ window.addEventListener('keyup', ({ keyCode }) => {
             }
     }
 })
+
+function createImage(imageSrc) {
+    const image = new Image()
+    image.src = imageSrc
+    return image
+}
+
+let player = new Player()
+
+animate()
