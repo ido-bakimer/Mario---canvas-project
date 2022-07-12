@@ -12,6 +12,9 @@ import spriteIdleRight from '../../assets/idleright.png'
 import spriteRunningLeft from '../../assets/runningleft.png'
 import spriteRunningRight from '../../assets/runningright.png'
 
+import wolfRight from '../../assets/wolfrunningright.png'
+import wolfLeft from '../../assets/wolfrunningleft.png'
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -38,35 +41,35 @@ class Player {
         }
         this.width = 45
         this.height = 80
-        this.speed = 10
+        this.speed = 8
         this.image = createImage(spriteIdleRight)
         this.frames = 0
+        this.framerate = 0
+        this.frameratecounter = 0
         this.sprites = {
-         stand : {
-            right: createImage(spriteIdleRight),
-            left: createImage(spriteIdleLeft),
-            cropStart:30,
-            cropEnd: 50 ,
-         }   ,
-         run: {
-            right: createImage(spriteRunningRight),
-            left: createImage(spriteRunningLeft),
-            cropStart:0,
-            cropEnd: 50 ,
-         }
+            stand: {
+                right: createImage(spriteIdleRight),
+                left: createImage(spriteIdleLeft),
+                cropStart: 30,
+                cropEnd: 50,
+            },
+            run: {
+                right: createImage(spriteRunningRight),
+                left: createImage(spriteRunningLeft),
+                cropStart: 0,
+                cropEnd: 50,
+            }
         }
-         this.currentSprite = this.sprites.stand.right
-         this.currentCropStart = this.sprites.stand.cropStart
-         this.currentCropEnd = this.sprites.stand.cropEnd
-
-
+        this.currentSprite = this.sprites.stand.right
+        this.currentCropStart = this.sprites.stand.cropStart
+        this.currentCropEnd = this.sprites.stand.cropEnd
     }
     draw() {
         // c.fillStyle = 'blue'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         c.drawImage(
             this.currentSprite,
-            this.currentCropStart + 80*this.frames ,
+            this.currentCropStart + 80 * this.frames,
             0,
             this.currentCropEnd,
             74,
@@ -77,7 +80,12 @@ class Player {
     }
 
     update() {
-        this.frames ++
+        this.frameratecounter++
+        if (this.frameratecounter > this.framerate){
+            this.frames++;
+             this.frameratecounter = 0
+        }
+        // console.log(this.frameratecounter)
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
         // this.velocity.x *= friction
@@ -89,6 +97,71 @@ class Player {
         // else { this.velocity.y = 0 }
     }
 
+}
+
+class Enemy {
+    constructor({ x, y }) {
+
+       this.position = {
+            x: x,
+            y: y
+        }
+        this.velocity = {
+            x: 6,
+        }
+        this.image = createImage(wolfRight)
+        this.width = 140
+        this.height = 62.5
+        this.frames = 0
+        this.loopcount = 0
+        this.direction = 1
+        this.sprites = {
+            run: {
+                right: createImage(wolfRight),
+                left: createImage(wolfLeft),
+
+            },
+        }
+        this.currentSprite = this.sprites.run.right
+
+
+    }
+    draw() {
+        // c.fillStyle = 'red'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(
+                this.currentSprite,
+                56 * this.frames,
+                0,
+                56,
+                25,
+                this.position.x,
+                this.position.y,
+                this.width,
+                this.height,
+        
+        
+        )
+        // console.log(this.position.x, "wolf2")
+
+    }
+    update() {
+        this.frames++
+        this.position.x += this.velocity.x*this.direction
+        if (this.frames > 31) {
+            this.loopcount++;
+            this.frames = 0
+            }
+        if (this.loopcount > 1){
+            this.direction *= -1;
+            this.loopcount = 0;
+            if (this.direction == -1){this.currentSprite = this.sprites.run.left}
+            else{this.currentSprite = this.sprites.run.right}
+        }
+        // console.log(this.currentSprite, "wolf")
+
+        this.draw()
+    }
 }
 
 class Platform {
@@ -135,6 +208,9 @@ let platforms = [
 let GenericObjs = [
 ]
 
+let enemies = [
+]
+
 const keys = { //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
     right: {  //it created a small stop before starting to move continusly. so instead of using key down to fire, i use it and keyup to flag here.
         pressed: false
@@ -154,6 +230,10 @@ function animate() {
     platforms.forEach((platform) => {
         platform.draw()
     })
+    enemies.forEach((Enemy) => {
+        Enemy.update()
+        Enemy.draw()
+    })
 
 
 
@@ -161,7 +241,7 @@ function animate() {
         && player.position.x < canvas.width - 500
     ) {
         player.velocity.x = player.speed;
-    } else if ((keys.left.pressed && player.position.x > 350)|| (keys.left.pressed && scrollOffset===0 && player.position.x > 0)) {
+    } else if ((keys.left.pressed && player.position.x > 350) || (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)) {
         player.velocity.x = -player.speed;
     } else {
         player.velocity.x *= friction;    //just realised that by using friction the v value will never 
@@ -173,14 +253,21 @@ function animate() {
             platforms.forEach((platform) => {
                 platform.position.x -= player.speed
             })
+            enemies.forEach((Enemy) => {
+                Enemy.position.x -= player.speed
+            })
             GenericObjs.forEach((platform) => {
                 platform.position.x -= player.speed * .66
             })
+
         }
-        else if (keys.left.pressed && scrollOffset >0) {
+        else if (keys.left.pressed && scrollOffset > 0) {
             scrollOffset -= player.speed
             platforms.forEach((platform) => {
                 platform.position.x += player.speed
+            })
+            enemies.forEach((Enemy) => {
+                Enemy.position.x += player.speed
             })
             GenericObjs.forEach((platform) => {
                 platform.position.x += player.speed * .66
@@ -189,8 +276,8 @@ function animate() {
     }
 
     platforms.forEach((platform) => {
-        if (player.position.y + player.height -20 <= platform.position.y
-            && player.position.y + player.height + player.velocity.y -20  >= platform.position.y
+        if (player.position.y + player.height - 30 <= platform.position.y
+            && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y
             && player.position.x + player.width >= platform.position.x
             && player.position.x <= platform.position.x + platform.width
         ) { player.velocity.y = 0 }
@@ -199,20 +286,29 @@ function animate() {
     if (scrollOffset > 4200) {
         alert('you won!')
         init()
-          }
+    }
 
     //lose condition
     if (player.position.y > canvas.height) {
-         console.log('you lose') 
-         init() 
+        console.log('you lose')
+        init()
+    }
+    enemies.forEach((Enemy) => {
+        if ((player.position.x +player.width > Enemy.position.x 
+            && player.position.y +player.height > Enemy.position.y
+            && player.position.x < Enemy.position.x + Enemy.width
+            && player.position.y + player.height < Enemy.position.y + Enemy.height ) ){
+            console.log('wolfed!');
+            init()
         }
-         
-    player.update()
 
+    })
+
+    player.update()
 
 }
 
-function init(){
+function init() {
     platforms = [
         new Platform({ x: 200, y: 100, image: createImage(platformIsland) }),
         new Platform({ x: 1000, y: 400, image: createImage(platformIsland) }),
@@ -220,7 +316,7 @@ function init(){
         new Platform({ x: 400, y: 300, image: createImage(platformIsland) }),
         new Platform({ x: -50, y: 500, image: createImage(platformIsland) }),
         new Platform({ x: 2250, y: 300, image: createImage(platform) }),
-        new Platform({ x: 2050, y: 450, image: createImage(platform) }),
+        new Platform({ x: 2050, y: 400, image: createImage(platform) }),
         new Platform({ x: 2050, y: 150, image: createImage(platform) }),
         new Platform({ x: 2350, y: 80, image: createImage(platform) }),
         new Platform({ x: 2950, y: 250, image: createImage(platformIsland) }),
@@ -231,19 +327,23 @@ function init(){
         new Platform({ x: 4350, y: 400, image: createImage(platformIsland) }),
         new Platform({ x: 3700, y: 300, image: createImage(platform) }),
         new Platform({ x: 4300, y: 300, image: createImage(platform) }),
-
-
-    
     ]
-    
+
     GenericObjs = [
         new GenericObj({ x: -300, y: 0, image: createImage(main_background) },),
         new GenericObj({ x: -300, y: 100, image: createImage(background4) }),
         new GenericObj({ x: -300, y: 0, image: createImage(background3) }),
         new GenericObj({ x: -300, y: 0, image: createImage(background2) }),
         new GenericObj({ x: -300, y: 350, image: createImage(background1) }),
-    
     ]
+
+    enemies = [
+        new Enemy({x: 400, y:270}),
+        new Enemy({x: 1750, y:470}),
+        new Enemy({x: 3600, y:370}),
+        new Enemy({x: 4100, y:370}),
+    ]
+
 
     player = new Player()
 
@@ -254,16 +354,17 @@ function init(){
 window.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
         case 87: case 38:
-            {  
-                if (Math.abs(player.velocity.y) > 1) { 
+            {
+                if (Math.abs(player.velocity.y) > 1) {
                     console.log('no jump')
-                break
+                    break
                 }
-                else{  
-                player.velocity.y -= 20
-                console.log('jump!')
-                break}
-              
+                else {
+                    player.velocity.y -= 20
+                    console.log('jump!')
+                    break
+                }
+
             }
         case 83: case 40:
             {

@@ -229,6 +229,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./assets/wolfrunningleft.png":
+/*!************************************!*\
+  !*** ./assets/wolfrunningleft.png ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "d0fc11ce7da7b25f8f3ad71001938542.png");
+
+/***/ }),
+
+/***/ "./assets/wolfrunningright.png":
+/*!*************************************!*\
+  !*** ./assets/wolfrunningright.png ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "aef8acc2dafbd037af6db1e00a0abbc5.png");
+
+/***/ }),
+
 /***/ "./src/js/canvas.js":
 /*!**************************!*\
   !*** ./src/js/canvas.js ***!
@@ -249,11 +275,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../assets/idleright.png */ "./assets/idleright.png");
 /* harmony import */ var _assets_runningleft_png__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../assets/runningleft.png */ "./assets/runningleft.png");
 /* harmony import */ var _assets_runningright_png__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../assets/runningright.png */ "./assets/runningright.png");
+/* harmony import */ var _assets_wolfrunningright_png__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../assets/wolfrunningright.png */ "./assets/wolfrunningright.png");
+/* harmony import */ var _assets_wolfrunningleft_png__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../assets/wolfrunningleft.png */ "./assets/wolfrunningleft.png");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 
 
@@ -290,9 +320,11 @@ var Player = /*#__PURE__*/function () {
     };
     this.width = 45;
     this.height = 80;
-    this.speed = 10;
+    this.speed = 8;
     this.image = createImage(_assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__["default"]);
     this.frames = 0;
+    this.framerate = 0;
+    this.frameratecounter = 0;
     this.sprites = {
       stand: {
         right: createImage(_assets_idleright_png__WEBPACK_IMPORTED_MODULE_8__["default"]),
@@ -322,7 +354,14 @@ var Player = /*#__PURE__*/function () {
   }, {
     key: "update",
     value: function update() {
-      this.frames++;
+      this.frameratecounter++;
+
+      if (this.frameratecounter > this.framerate) {
+        this.frames++;
+        this.frameratecounter = 0;
+      } // console.log(this.frameratecounter)
+
+
       this.position.y += this.velocity.y;
       this.position.x += this.velocity.x; // this.velocity.x *= friction
 
@@ -340,11 +379,77 @@ var Player = /*#__PURE__*/function () {
   return Player;
 }();
 
-var Platform = /*#__PURE__*/function () {
-  function Platform(_ref) {
+var Enemy = /*#__PURE__*/function () {
+  function Enemy(_ref) {
     var x = _ref.x,
-        y = _ref.y,
-        image = _ref.image;
+        y = _ref.y;
+
+    _classCallCheck(this, Enemy);
+
+    this.position = {
+      x: x,
+      y: y
+    };
+    this.velocity = {
+      x: 6
+    };
+    this.image = createImage(_assets_wolfrunningright_png__WEBPACK_IMPORTED_MODULE_11__["default"]);
+    this.width = 140;
+    this.height = 62.5;
+    this.frames = 0;
+    this.loopcount = 0;
+    this.direction = 1;
+    this.sprites = {
+      run: {
+        right: createImage(_assets_wolfrunningright_png__WEBPACK_IMPORTED_MODULE_11__["default"]),
+        left: createImage(_assets_wolfrunningleft_png__WEBPACK_IMPORTED_MODULE_12__["default"])
+      }
+    };
+    this.currentSprite = this.sprites.run.right;
+  }
+
+  _createClass(Enemy, [{
+    key: "draw",
+    value: function draw() {
+      // c.fillStyle = 'red'
+      // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+      c.drawImage(this.currentSprite, 56 * this.frames, 0, 56, 25, this.position.x, this.position.y, this.width, this.height); // console.log(this.position.x, "wolf2")
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.frames++;
+      this.position.x += this.velocity.x * this.direction;
+
+      if (this.frames > 31) {
+        this.loopcount++;
+        this.frames = 0;
+      }
+
+      if (this.loopcount > 1) {
+        this.direction *= -1;
+        this.loopcount = 0;
+
+        if (this.direction == -1) {
+          this.currentSprite = this.sprites.run.left;
+        } else {
+          this.currentSprite = this.sprites.run.right;
+        }
+      } // console.log(this.currentSprite, "wolf")
+
+
+      this.draw();
+    }
+  }]);
+
+  return Enemy;
+}();
+
+var Platform = /*#__PURE__*/function () {
+  function Platform(_ref2) {
+    var x = _ref2.x,
+        y = _ref2.y,
+        image = _ref2.image;
 
     _classCallCheck(this, Platform);
 
@@ -369,10 +474,10 @@ var Platform = /*#__PURE__*/function () {
 }();
 
 var GenericObj = /*#__PURE__*/function () {
-  function GenericObj(_ref2) {
-    var x = _ref2.x,
-        y = _ref2.y,
-        image = _ref2.image;
+  function GenericObj(_ref3) {
+    var x = _ref3.x,
+        y = _ref3.y,
+        image = _ref3.image;
 
     _classCallCheck(this, GenericObj);
 
@@ -397,6 +502,7 @@ var GenericObj = /*#__PURE__*/function () {
 
 var platforms = [];
 var GenericObjs = [];
+var enemies = [];
 var keys = {
   //key down has a weird bump, it fires one time than only after a set amount of time fires rapidly. 
   right: {
@@ -418,6 +524,10 @@ function animate() {
   platforms.forEach(function (platform) {
     platform.draw();
   });
+  enemies.forEach(function (Enemy) {
+    Enemy.update();
+    Enemy.draw();
+  });
 
   if (keys.right.pressed && player.position.x < canvas.width - 500) {
     player.velocity.x = player.speed;
@@ -436,6 +546,9 @@ function animate() {
       platforms.forEach(function (platform) {
         platform.position.x -= player.speed;
       });
+      enemies.forEach(function (Enemy) {
+        Enemy.position.x -= player.speed;
+      });
       GenericObjs.forEach(function (platform) {
         platform.position.x -= player.speed * .66;
       });
@@ -444,6 +557,9 @@ function animate() {
       platforms.forEach(function (platform) {
         platform.position.x += player.speed;
       });
+      enemies.forEach(function (Enemy) {
+        Enemy.position.x += player.speed;
+      });
       GenericObjs.forEach(function (platform) {
         platform.position.x += player.speed * .66;
       });
@@ -451,7 +567,7 @@ function animate() {
   }
 
   platforms.forEach(function (platform) {
-    if (player.position.y + player.height - 20 <= platform.position.y && player.position.y + player.height + player.velocity.y - 20 >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
+    if (player.position.y + player.height - 30 <= platform.position.y && player.position.y + player.height + player.velocity.y - 30 >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width) {
       player.velocity.y = 0;
     }
   }); //win condition
@@ -467,6 +583,12 @@ function animate() {
     init();
   }
 
+  enemies.forEach(function (Enemy) {
+    if (player.position.x + player.width > Enemy.position.x && player.position.y + player.height > Enemy.position.y && player.position.x < Enemy.position.x + Enemy.width && player.position.y + player.height < Enemy.position.y + Enemy.height) {
+      console.log('wolfed!');
+      init();
+    }
+  });
   player.update();
 }
 
@@ -497,7 +619,7 @@ function init() {
     image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
   }), new Platform({
     x: 2050,
-    y: 450,
+    y: 400,
     image: createImage(_assets_Platform_png__WEBPACK_IMPORTED_MODULE_1__["default"])
   }), new Platform({
     x: 2050,
@@ -561,13 +683,26 @@ function init() {
     y: 350,
     image: createImage(_assets_background1_png__WEBPACK_IMPORTED_MODULE_3__["default"])
   })];
+  enemies = [new Enemy({
+    x: 400,
+    y: 270
+  }), new Enemy({
+    x: 1750,
+    y: 470
+  }), new Enemy({
+    x: 3600,
+    y: 370
+  }), new Enemy({
+    x: 4100,
+    y: 370
+  })];
   player = new Player();
   scrollOffset = 0;
 } //opted to use keydown and keyup as flags instead of basic fire, lets hope it works
 
 
-window.addEventListener('keydown', function (_ref3) {
-  var keyCode = _ref3.keyCode;
+window.addEventListener('keydown', function (_ref4) {
+  var keyCode = _ref4.keyCode;
 
   switch (keyCode) {
     case 87:
@@ -619,8 +754,8 @@ window.addEventListener('keydown', function (_ref3) {
       }
   }
 });
-window.addEventListener('keyup', function (_ref4) {
-  var keyCode = _ref4.keyCode;
+window.addEventListener('keyup', function (_ref5) {
+  var keyCode = _ref5.keyCode;
   console.log(keyCode);
 
   switch (keyCode) {
